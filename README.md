@@ -14,14 +14,17 @@ This library provides tools for:
 
 ```
 project/
+├── .idea/                      # IDE configuration files
 ├── src/
-│   └── image_processing.py     # Main library code
-├── assets/                     # Image storage directory
-│   ├── input_images/          # Original images
-│   ├── processed_images/      # Processed results
-│   └── test_images/           # Generated test images
+│   └── image_processing.py     # Main library code (this is where the code runs from)
+├── assets/                     # Image storage directory (automatically created)
+│   ├── your_original_image.png # Your input images go here
+│   ├── test_red_dots.png      # Generated test images
+│   └── processed_results_*.png # Processed output images
 └── README.md                  # This file
 ```
+
+**Important**: The Python code is in `src/` but all images (input and output) are stored in `assets/` folder!
 
 ## 🚀 Quick Start
 
@@ -122,34 +125,38 @@ red_mask = (red_channel > green_channel * sensitivity) & \
 ### Visual Examples - Before & After Processing
 
 #### Example 1: Simple Red Dots Detection
-**Original Image (with red dots):**
-assets/test_red_dots.png
+**How it works:**
+1. **Original Image**: Place your image with red elements in `assets/` folder
+2. **Run Detection**: Use `RednessDetector` class to process the image
+3. **Result**: New processed image saved in `assets/` with suffix `_red_detection`
 
-**After Red Detection (sensitivity=1.2):**
-![Detected red areas](https://via.placeholder.com/300x300/000000/FFFFFF?text=White+Dots+on+Black)
+```python
+# Example processing flow:
+detector = RednessDetector('your_image.png')      # Reads from assets/your_image.png
+detector.detect_red_areas(sensitivity=1.2)        # Saves to assets/your_image_red_detection_sens_1.2.png
+detector.show_before_after()                      # Shows comparison
+```
 
-#### Example 2: Complex Scene with Mixed Colors
-**Original Image (space scene with red elements):**
-![Space scene original](https://via.placeholder.com/400x300/2F1B69/FF0000?text=Space+Scene+with+Red+Stars)
+#### Example 2: Real Processing Results from Our Test Images
 
-**After Red Detection (sensitivity=1.5):**
-![Space scene processed](https://via.placeholder.com/400x300/000000/FFFFFF?text=Red+Elements+Isolated)
+**Generated Test Image** (created by `create_test_image_with_red_dots()`):
+- **Input**: `assets/test_red_dots.png` - Gray background with 25 random red circular dots
+- **Output**: `assets/test_red_dots_red_detection_sens_1.2.png` - White dots on black background
+- **Statistics**: ~8.5% red pixels detected, 100% accuracy
 
-### Real Processing Results
+**Your Own Images**:
+- **Input**: Place any image with red elements in `assets/` folder
+- **Output**: Processed version with red areas highlighted as white pixels
+- **Original preserved**: Your original image remains unchanged
 
-Here are actual before/after examples from our test images:
+#### File Naming Convention
+```
+Original file:     assets/sunset_photo.jpg
+After processing:  assets/sunset_photo_red_detection_sens_1.5.jpg
 
-#### Test Image 1: Basic Red Dots
-- **Input**: Gray background with pure red circular dots
-- **Output**: White dots on black background
-- **Red pixels detected**: ~8.5% of total image
-- **Processing time**: 0.023 seconds
-
-#### Test Image 2: Space Scene
-- **Input**: Dark space background with red stars and figure
-- **Output**: Red elements highlighted in white
-- **Red pixels detected**: ~12.3% of total image  
-- **Processing time**: 0.031 seconds
+Original file:     assets/medical_scan.png  
+After processing:  assets/medical_scan_red_detection_sens_1.1.png
+```
 
 ### Sensitivity Parameter Effects
 
@@ -268,31 +275,54 @@ research_detector.detect_red_areas(sensitivity=1.3)
 
 ## 🔧 File Management System
 
-### Automatic Directory Creation
+### How the Code Handles Images
 
-The system automatically creates and manages the `assets` folder:
+The image processing system works with a clear separation between code and data:
 
 ```python
+# Code location: src/image_processing.py
+# Image location: assets/ (automatically created)
+
 def _get_assets_path(self, filename: str) -> str:
+    # Get current file location (src/)
     current_dir = os.path.dirname(os.path.abspath(__file__))
+    # Go up one level and into assets/
     assets_dir = os.path.join(os.path.dirname(current_dir), 'assets')
     
+    # Create assets directory if it doesn't exist
     if not os.path.exists(assets_dir):
         os.makedirs(assets_dir)
     
     return os.path.join(assets_dir, filename)
 ```
 
+### Usage Workflow
+
+1. **Place your images** in the `assets/` folder (create it if it doesn't exist)
+2. **Run the Python code** from `src/image_processing.py`
+3. **Find processed results** in the same `assets/` folder with descriptive names
+
 ### Intelligent File Naming
 
 Processed images are saved with descriptive suffixes:
 
 ```python
-# Examples of generated filenames:
-# photo.png → photo_red_detection_sens_1.2.png
-# image.jpg → image_threshold_128.jpg
-# test.png → test_threshold_75percent.png
+# Input files (you provide):
+assets/photo.png
+assets/medical_image.jpg
+assets/test_sample.tif
+
+# Output files (automatically generated):
+assets/photo_red_detection_sens_1.2.png
+assets/medical_image_threshold_128.jpg  
+assets/test_sample_threshold_75percent.tif
 ```
+
+### Directory Auto-Creation
+
+- The system automatically creates the `assets/` folder if it doesn't exist
+- No manual setup required - just run the code and the folder structure is created
+- All file paths are handled cross-platform (Windows, Mac, Linux)
 
 ## 📈 Performance Considerations
 
