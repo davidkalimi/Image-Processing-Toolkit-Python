@@ -457,9 +457,7 @@ This project is educational and welcomes contributions:
 4. **Push to branch**: `git push origin feature/new-filter`
 5. **Submit pull request**
 
-## 📝 License
 
-This project is open source and available under the [MIT License](LICENSE).
 
 ## 🎓 Educational Goals
 
