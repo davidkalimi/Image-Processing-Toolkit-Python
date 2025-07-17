@@ -123,7 +123,7 @@ red_mask = (red_channel > green_channel * sensitivity) & \
 
 #### Example 1: Simple Red Dots Detection
 **Original Image (with red dots):**
-![Original with red dots](https://via.placeholder.com/300x300/C8C8C8/FF0000?text=Red+Dots+on+Gray)
+assets/test_red_dots.png
 
 **After Red Detection (sensitivity=1.2):**
 ![Detected red areas](https://via.placeholder.com/300x300/000000/FFFFFF?text=White+Dots+on+Black)
