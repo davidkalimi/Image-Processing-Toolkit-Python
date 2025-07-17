@@ -128,57 +128,40 @@ red_mask = (red_channel > green_channel * sensitivity) & \
 
 **🎯 Test Case 1: Basic Red Dots Detection**
 
-**Original Images:**
-- `test_red_dots.png` - Generated test image with red dots on gray background
-- `test_red_dots_image.png` - Alternative test image with red elements
+| Before Processing | After Processing |
+|-------------------|------------------|
+| ![Original Test Image](assets/test_red_dots.png) | ![Red Detection Result](assets/test_red_dots_red_detection_sens_1.2.png) |
+| `test_red_dots.png` | `test_red_dots_red_detection_sens_1.2.png` |
+| Red dots on gray background | White dots on black background |
 
-**Processed Results:**
-- `test_red_dots_red_detection_sens_1.2.png` - Red areas detected and highlighted
-- `test_red_dots_image_redness_detected.png` - Redness detection results
+**🎯 Test Case 2: Alternative Red Elements**
 
-**Processing Details:**
+| Before Processing | After Processing |
+|-------------------|------------------|
+| ![Original Image Variant](assets/test_red_dots_image.png) | ![Redness Detection](assets/test_red_dots_image_redness_detected.png) |
+| `test_red_dots_image.png` | `test_red_dots_image_redness_detected.png` |
+| Original with red elements | Red areas highlighted in white |
+
+#### Processing Code Examples
+
 ```python
-# Example that generated these results:
-detector = RednessDetector('test_red_dots.png')
-detector.detect_red_areas(sensitivity=1.2)
-# Result: test_red_dots_red_detection_sens_1.2.png
+# Generate the first set:
+detector1 = RednessDetector('test_red_dots.png')
+detector1.detect_red_areas(sensitivity=1.2)
+# Creates: test_red_dots_red_detection_sens_1.2.png
 
+# Generate the second set:
 detector2 = RednessDetector('test_red_dots_image.png') 
-detector2.detect_red_areas(sensitivity=1.2)
-# Result: test_red_dots_image_redness_detected.png
+detector2.detect_red_areas()
+# Creates: test_red_dots_image_redness_detected.png
 ```
 
-#### What You'll See in Your Assets Folder
+#### What You Can See
 
-```
-assets/
-├── test_red_dots.png                           # Original: Red dots on gray
-├── test_red_dots_red_detection_sens_1.2.png    # Result: White dots on black
-├── test_red_dots_image.png                     # Original: Test image variant  
-└── test_red_dots_image_redness_detected.png    # Result: Detected red areas
-```
-
-#### File Processing Examples
-
-| Original File | Processed Result | Detection Method | Output Description |
-|---------------|------------------|------------------|-------------------|
-| `test_red_dots.png` | `test_red_dots_red_detection_sens_1.2.png` | RednessDetector(sensitivity=1.2) | White circular areas on black background |
-| `test_red_dots_image.png` | `test_red_dots_image_redness_detected.png` | RednessDetector(default settings) | Red elements highlighted as white pixels |
-
-#### Comparison Results
-
-**Input → Output Transformation:**
-- **Red pixels** (RGB values like [255, 0, 0]) → **White pixels** [255, 255, 255]
-- **Non-red pixels** (gray background, other colors) → **Black pixels** [0, 0, 0]
-- **Detection accuracy**: 100% for pure red dots, ~95% for red-dominant areas
-- **Processing time**: 0.02-0.05 seconds per image
-
-**Your Own Images**:
-When you add your own images to `assets/`, you'll get similar before/after pairs:
-```
-your_photo.jpg → your_photo_red_detection_sens_1.2.jpg
-medical_scan.png → medical_scan_red_detection_sens_1.1.png
-```
+- **Red pixels** → **White pixels** (255, 255, 255)
+- **Non-red pixels** → **Black pixels** (0, 0, 0)  
+- **Perfect edge detection** of red circular areas
+- **High contrast output** for easy analysis
 
 ### Sensitivity Parameter Effects
 
